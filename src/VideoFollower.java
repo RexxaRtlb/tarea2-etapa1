@@ -1,57 +1,72 @@
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
 
 public class VideoFollower extends Subscriber {
+
+    private VBox view;
+    private ComboBox<String> comboBox;
+    private Label label;
+    private MediaView mediaView;
+    private MediaPlayer mediaPlayer;
+
     public VideoFollower(String name, String topicName) {
         super(name, topicName);
 
-        video = new Button("Esperando publicación...");
-        video.setOnAction(e -> {
-            if (lastURL != null && !lastURL.isEmpty()) {
-                playVideo(lastURL);
-            }
-        });
+        view = new VBox(10);
+        label = new Label(name + " -> " + topicName + ":");
+        comboBox = new ComboBox<>();
 
-        view = new HBox(10);
-        view.getChildren().addAll(video);
+        // Agrega URLs oficiales
+        comboBox.getItems().addAll(
+            "http://profesores.elo.utfsm.cl/~agv/elo329/1s22/Assignments/20220430_100849.mp4",
+            "http://profesores.elo.utfsm.cl/~agv/elo329/1s22/Assignments/20220430_101027.mp4"
+        );
+        comboBox.setPromptText("Selecciona un video...");
+        comboBox.setEditable(false);
+
+        comboBox.setOnAction(e -> playSelectedVideo());
+
+        mediaView = new MediaView();
+
+        view.getChildren().addAll(label, comboBox, mediaView);
     }
 
     @Override
     public void update(String message) {
-        lastURL = message;
-        video.setText(message); // Actualiza el texto del botón con la nueva URL
+        if (!comboBox.getItems().contains(message)) {
+            comboBox.getItems().add(message);
+        }
+        comboBox.setValue(message);
+        playVideo(message);
     }
 
-    public HBox getView() {
-        return view;
+    private void playSelectedVideo() {
+        String url = comboBox.getValue();
+        if (url != null) {
+            playVideo(url);
+        }
     }
 
     private void playVideo(String url) {
         try {
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
             Media media = new Media(url);
-            MediaPlayer mediaPlayer = new MediaPlayer(media);
-            MediaView mediaView = new MediaView(mediaPlayer);
-
-            VBox root = new VBox(mediaView);
-            Scene scene = new Scene(root, 640, 480);
-            Stage stage = new Stage();
-            stage.setTitle("Reproduciendo video");
-            stage.setScene(scene);
-            stage.show();
-
-            mediaPlayer.play();
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setAutoPlay(true);
+            mediaView.setMediaPlayer(mediaPlayer);
         } catch (Exception e) {
-            System.out.println("Error al reproducir video: " + e.getMessage());
+            System.out.println("No se pudo reproducir el video: " + url);
         }
     }
 
-    private HBox view;
-    private Button video;
-    private String lastURL;
+    public VBox getView() {
+        return view;
+    }
 }
