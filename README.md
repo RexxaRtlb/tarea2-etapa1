@@ -40,7 +40,7 @@ src/
 
 1. Clonar el repositorio:
 ```
-git clone <URL-DEL-REPOSITORIO>
+git clone <https://github.com/RexxaRtlb/tarea2-etapa1>
 ```
 
 2. Abrir en IntelliJ
