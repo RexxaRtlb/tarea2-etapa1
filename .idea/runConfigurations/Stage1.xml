@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Stage1" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="Stage1" />
+    <option name="MAIN_CLASS_NAME" value="PubSubsPatternSimulator" />
     <module name="tarea2" />
     <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\sebat\Desktop\javafx-sdk-24.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml,javafx.media " />
     <method v="2">
