@@ -93,11 +93,11 @@ public class PubSubsPatternSimulator extends Application {
     }
 
     private void addCarSubs() {
-        String name = getInputSting("GPS Subscriber Name");
+        String name = getInputSting("GPS Tracker Name");
         String topic = getInputSting("GPS Topic");
-        GPSFollower follower = new GPSFollower(name, topic);
-        if (broker.subscribe(follower)) {
-            follower.show();
+        CarTracker tracker = new CarTracker(name, topic);
+        if (broker.subscribe(tracker)) {
+            tracker.show();
         } else {
             System.out.println("Tópico no encontrado.");
         }
